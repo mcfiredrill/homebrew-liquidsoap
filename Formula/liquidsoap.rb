@@ -146,7 +146,7 @@ class Liquidsoap < Formula
   depends_on 'ocaml-findlib' => :build
   depends_on 'ocaml-dtools' => :build
   depends_on 'ocaml-duppy' => :build
-  depends_on 'ocaml-cry' if cry? # This package contains an OCaml low level implementation of the shout protocol.
+  depends_on 'ocaml-cry' if build.with? 'cry' # This package contains an OCaml low level implementation of the shout protocol.
   depends_on 'ocaml-shine' if shine?
   depends_on 'ocaml-pcre'
   depends_on 'ocaml-camomile'
@@ -307,12 +307,12 @@ index 586c13e..e208b5a 100644
                else
 @@ -252,7 +252,7 @@ let external_input_oblivious process filename prebuf =
    in
-   let read len = 
+   let read len =
      if not !process_done then
 -      let ret = String.create len in
 +      let ret = Bytes.to_string (Bytes.create len) in
        let read = Unix.read pull_e ret 0 len in
-       if read = 0 then close () ; 
+       if read = 0 then close () ;
        ret,read
 diff --git a/src/decoder/image/ppm_decoder.ml b/src/decoder/image/ppm_decoder.ml
 index 720b5c1..39830ad 100644
@@ -536,7 +536,7 @@ index 8d954e6..b362714 100644
        if pos=size then buf else
          let p = Unix.read socket buf pos (size-pos) in
 @@ -84,7 +84,7 @@ let read_metadata () = let old_chunk = ref "" in fun socket ->
- 
+
  let read_line socket =
    let ans = ref "" in
 -  let c = String.create 1 in
@@ -683,7 +683,7 @@ index 16e745c..f53718d 100644
    in
 @@ -187,7 +187,7 @@ let short_string i =
      (String.make 1 (char_of_int up))
- 
+
  let int_string n =
 -  let s = String.create 4 in
 +  let s = Bytes.to_string (Bytes.create 4) in
